@@ -1,11 +1,11 @@
-site_name: Social Movement Narrative Analysis
-site_description: Tell people what this website is about
-site_author: Laura W. Dozal
-site_url: https://github.com/lwdozal/SM_Narrative
+site_name: FOSS 23 fall GitHub tutorial
+site_description: Site for tutorial for FOSS 23 attedees
+site_author: Michele Cosi
+site_url: https://cosimichele.github.io/foss23-fall-gitpages
 
 # Repository
-repo_name: SM_Narrative
-repo_url: https://github.com/lwdozal/SM_Narrative
+repo_name: foss23-fall-gitpages
+repo_url: https://github.com/CosiMichele/foss23-fall-gitpages
 edit_uri: edit/main/docs/
 # Copyright
 copyright: 'Copyright &copy; 2023 - 2024'
@@ -16,7 +16,7 @@ theme:
     name: material
 highlightjs: true
 font:
-    text: Calibri
+    text: Roboto
     code: Regular
 palette:
     scheme: default
@@ -51,7 +51,6 @@ icon:
 # Page tree
 nav:
 - Home: index.md
-- #you can add other pages here but hey need to have their own file i.e. code.md
 
 # Extra Plugins
 plugins:
