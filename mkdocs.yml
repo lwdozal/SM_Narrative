@@ -1,11 +1,11 @@
-site_name: FOSS 23 fall GitHub tutorial
-site_description: Site for tutorial for FOSS 23 attedees
-site_author: Michele Cosi
-site_url: https://cosimichele.github.io/foss23-fall-gitpages
+site_name: Social Movement Narrative
+site_description: Test site for Social Movement Narrative Dissertation
+site_author: Laura W. Dozal
+site_url: https://lwdozal.github.io/SM_Narrative
 
 # Repository
-repo_name: foss23-fall-gitpages
-repo_url: https://github.com/CosiMichele/foss23-fall-gitpages
+repo_name: SM_Narrative
+repo_url: https://lwdozal.github.io/SM_Narrative
 edit_uri: edit/main/docs/
 # Copyright
 copyright: 'Copyright &copy; 2023 - 2024'
