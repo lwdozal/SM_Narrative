@@ -48,7 +48,7 @@ The goals of the FOSS Reference Hub are to:
 
 
 ### Internal communications: 
-**Researcher Dissertation**, lwerthmann@arizona.edu
+**Researcher Email**, lwerthmann@arizona.edu
 
 
 ### Procedures
