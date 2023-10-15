@@ -5,14 +5,10 @@
 ### Table of Contents
 
 1. [Introduction](#introduction)
-    - [Project Overview and Objectives](#project-overview-and-objectives)
-        - [dplPy](#dplpy)
-        - [FOSS Reference Hub](#foss-reference-hub)
-    - [Our Team](#our-team)
-        - [Organizational Structure](#organizational-structure)
-2. [Operations](#operations)
-    - [Communications](#communications)
-    - [Procedures](#procedures)
+    - [Social Movement Narrative Dissertation](#Social-Movement-Narrative-Dissertation)
+    - [FOSS Reference Hub](#foss-reference-hub)
+    - [Dissertation Committee](#Dissertation-Committee)
+2. [Procedures](#procedures)
 3. [Community Practices](#community-practices)
     - [Open Science Commitment](#open-science-commitment)
     - [Land Acknowledgement](#land-acknowledgement)
@@ -29,6 +25,7 @@ This Project Governance document defines operating procedures and rules aimed to
 
 **Abstract**
 Social movements have been using social media to share their goals, values, and grievances with the world for the past decade. This information is spread throughout platforms usually in visual form, and from various perspectives. This information can be seen as fragmented and not fully informative. To solve this problem, this research uses mixed methods applications to understand narrative frames of online image content representing the anti-femicide movement in Mexico. This social movement is highlighted due to consistent social media messaging throughout the past decade with a recent increase in activity. This information also represents multiple perspectives from across the country. The methods used will work in tangent to first use deep learning models to classify narrative frames based on themes from academic literature, non-governmental organizations, and government. These frames are visualized in network form for experts in the anti-femicide movement. These experts will form a focus group to implement Gillian Rose’s visual interpretation modalities to create an ontology of image relations. The ontology will be used in a knowledge graph which links dynamic data. This research offers theoretical contributions to computer vision, online social movement frames and images. It holds practical implications for computational social scientists using artificial intelligence to understand social phenomena.
+**Researcher Email**, lwerthmann@arizona.edu
 
 
 #### FOSS Reference Hub
@@ -45,11 +42,6 @@ The goals of the FOSS Reference Hub are to:
 - Chair: Dr. Jamie, Lee, Associate Dean, Faculty Affairs Associate Professor
 - Dr. Zack Lischer-Katz, Assistant Professor Director of Graduate Studies
 - Dr. Clayton Morrison, Associate Professor
-
-
-### Internal communications: 
-**Researcher Email**, lwerthmann@arizona.edu
-
 
 ### Procedures
 
