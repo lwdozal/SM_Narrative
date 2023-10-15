@@ -22,7 +22,7 @@
 
 ## Introduction
 
-This Project Governance document defines operating procedures and rules aimed to clarify and support the involvement of the social movement dissertation for the iSchool and the FOSS reference hub.
+This Project Governance document defines operating procedures and rules aimed to clarify and support the involvement of a social movement dissertation for the iSchool and the FOSS reference hub.
 
 
 #### Social Movement Narrative Dissertation
