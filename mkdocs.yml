@@ -42,7 +42,7 @@ search_index_only: true
 # Palette and theme (uses personalized colours)
 language: en
 palette:
-    primary: custom
+    primary: Black
     accent: custom
 icon:
     logo: material/cogs
