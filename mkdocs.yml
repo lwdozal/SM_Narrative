@@ -42,8 +42,8 @@ search_index_only: true
 # Palette and theme (uses personalized colours)
 language: en
 palette:
-    primary: Black
-    accent: custom
+    primary: teal
+    accent: indigo
 icon:
     logo: material/cogs
     favicon: material/cogs
