@@ -51,6 +51,7 @@ icon:
 # Page tree
 nav:
 - Home: index.md
+- Code: code
 
 # Extra Plugins
 plugins:
