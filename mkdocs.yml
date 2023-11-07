@@ -51,7 +51,9 @@ icon:
 # Page tree
 nav:
 - Home: index.md
-- Code: code
+- Data: code/data
+- Code/Analysis: code
+- Documents: docs/pdfs
 
 # Extra Plugins
 plugins:
