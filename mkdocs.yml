@@ -50,7 +50,7 @@ icon:
 
 # Page tree
 nav:
-- Home: index.md
+- Home: docs/index.md
 - Data: code/data
 - Code/Analysis: code
 - Documents: docs/pdfs
