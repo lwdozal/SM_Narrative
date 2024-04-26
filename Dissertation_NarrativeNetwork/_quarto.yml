@@ -1,0 +1,28 @@
+project:
+  type: book
+
+book:
+  title: "Dissertation_NarrativeNetwork"
+  author: "Laura W. Dozal"
+  date: "4/25/2024"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - part: "Motivation"
+      chapters: 
+      - feminicideFrames.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+  docx:
+    reference-doc: diss_reference.docx
+
+editor: visual
+
