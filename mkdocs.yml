@@ -53,7 +53,7 @@ nav:
 - Home: docs/index.md
 - Data: code/data
 - Code/Analysis: code
-- Documents: Dissertation_NarrativeNetwork <!--docs/pdfs-->
+- Test Disssertation: Dissertation_NarrativeNetwork/feminicideFrames.qmd
 
 # Extra Plugins
 plugins:
