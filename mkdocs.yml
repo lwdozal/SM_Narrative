@@ -53,7 +53,7 @@ nav:
 - Home: docs/index.md
 - Data: code/data
 - Code/Analysis: code
-- Documents: docs/pdfs
+- Documents: Dissertation_NarrativeNetwork <!--docs/pdfs-->
 
 # Extra Plugins
 plugins:
