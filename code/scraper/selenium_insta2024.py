@@ -55,8 +55,9 @@ def login(username, password, url):
 # function to get first post
 def first_post():
 	time.sleep(3)
-	# pic = driver.find_element(By.CSS_SELECTOR,'div[class="_aagw"]').click()
-	pic = driver.find_element(By.CSS_SELECTOR,'span[class="html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs"]').click()
+	#div[class="_aagw"] is the correct version, the second pic variable helps when you've been tesing instagram too many times
+	pic = driver.find_element(By.CSS_SELECTOR,'div[class="_aagw"]').click()
+	# pic = driver.find_element(By.CSS_SELECTOR,'span[class="html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs"]').click()
 	print("opened first post")
 	# print("first_post pic:",pic)
 	print("first_post url", driver.current_url)
@@ -69,7 +70,7 @@ def next_post():
 	try:
 		# nex = driver.find_element(By.NAME,"coreSpriteRightPaginationArrow")
 		# nex = driver.find_element("css selector","button[type='Next']").click()
-		nex = driver.find_element("css selector","svg[class='x1lliihq x1n2onr6 x175jnsf']").click()
+		nex = driver.find_element("css selector","svg[class='x1lliihq x1n2onr6 x175jnsf']")
 		
 		return nex
 	except selenium.common.exceptions.NoSuchElementException:
@@ -149,43 +150,42 @@ def save_PostContent(hashtag, img_name):
 
 	img_url = driver.current_url
 	img_call = img_url.split('/')[-2]
-	print(img_call)
+	print("img_call", img_call)
 
-	img_src = []
+	post_src = []
 	img__alt = []
 	accounts = []
-	video_src = []
 	post_like = []
 	comments = []
 	datetime = []
 	img_file = []
 
-	if nested_check() != 0:
-	# if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not None:
+	# if nested_check() != 0:
+	if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not None:
 		img_cnt = 1
 		if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:
 			vid_src = vid_src_alt(img_cnt)[0]
 			vid_src = vid_src.split("blob:")[-1]
-			video_src.append(vid_src)
+			post_src.append(vid_src)
 			mp4 = urllib.request.urlretrieve(vid_src, '{}.mp4'.format(img_call))
 			img_file.append(mp4[0])
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# 	f.write(mp4[0])			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# mp4.save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.mp4')
 			img_cnt +=1
-			nested_check().click()        
-			# driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
+			# nested_check().click()        
+			driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
 		else:
-			src, alt, account, likes, comment, time = img_src_alt(img_cnt)
+			src, alt, account, likes, comment, time = post_src(img_cnt)
 			img_cnt +=1
-			img_src.append(src)
+			post_src.append(src)
 			img__alt.append(alt)
 			accounts.append(account)
 			post_like.append(likes)
 			comments.append(comment)
 			datetime.append(time)
 
-			jpg = urllib.request.urlretrieve(img_src, '{}.jpg'.format(img_call))
+			jpg = urllib.request.urlretrieve(src, '{}.jpg'.format(img_call))
 			print("jpg path", jpg)
 			img_file.append(jpg[0])
 			# jpg[0].save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.jpg')
@@ -194,9 +194,8 @@ def save_PostContent(hashtag, img_name):
 
 			# tags.append(tag)
    
-			nested_check().click()        
-
-			# driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
+			# nested_check().click()        
+			driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
 	else:
 		img_cnt = 1
 		if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:
@@ -206,7 +205,7 @@ def save_PostContent(hashtag, img_name):
 			comments.append(comment)
 			datetime.append(time)
 			vid_src = vid_src.split("blob:")[-1]
-			video_src.append(vid_src)
+			post_src.append(vid_src)
 			mp4 = urllib.request.urlretrieve(vid_src, '{}.mp4'.format(img_call))
 			print("mp4 path", mp4)
 			img_file.append(mp4[0])
@@ -219,13 +218,13 @@ def save_PostContent(hashtag, img_name):
 			# tags.append(tag)
 		else:
 			src1, alt1, account, likes, comment, time = img_src_alt(img_cnt)
-			img_src.append(src1)
+			post_src.append(src1)
 			img__alt.append(alt1)
 			accounts.append(account)
 			post_like.append(likes)
 			comments.append(comment)
 			datetime.append(time)
-			jpg = urllib.request.urlretrieve(img_src, '{}.jpg'.format(img_call))
+			jpg = urllib.request.urlretrieve(src1, '{}.jpg'.format(img_call))
 			print("jpg path", jpg[0])
 			img_file.append(jpg[0])
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
@@ -243,16 +242,16 @@ def save_PostContent(hashtag, img_name):
 	# this is done because the lists are different lengths
 	s1 = pd.Series(driver.current_url, name='URL')
 	s2 = pd.Series(img_name, name='img_name')
-	s3 = pd.Series(img_src, name='img_src')
+	s3 = pd.Series(post_src, name='post_src')
 	s4 = pd.Series(img__alt, name='img__alt')
 	s5 = pd.Series(accounts, name='accounts')
 	s6 = pd.Series(post_like, name='like_count')
 	s7 = pd.Series(comments, name='initial_comment')
 	s8 = pd.Series(datetime, name='datetime')
 	s9 = pd.Series(img_file, name='post_file')
-	s10 = pd.Series(video_src, name='video_src')
-	s11 = pd.Series(hashtag + '/'+img_call, name='file_path')
-	df = pd.concat([s1,s2, s3,s4,s5,s6,s7,s8,s9,s10,s11], axis=1)
+	# s10 = pd.Series(video_src, name='video_src')
+	s10 = pd.Series(hashtag + '/'+img_call, name='file_path')
+	df = pd.concat([s1,s2, s3,s4,s5,s6,s7,s8,s9,s10], axis=1)
 	#append df to existing csv (create one before running)
 	df.to_csv('content.csv', mode='a', index=True, header=False)
 	print("Data appended successfully.")
@@ -306,9 +305,10 @@ def download_allposts(hashtag):
 			count_img += 1
 			# next_post()
 			save_PostContent(hashtag, hashtag +'_imgcnt_'+str(count_img))
+			print("added multiple image post")
+			post_count +=1
 			nescheck.click()
 			nescheck = nested_check()
-			post_count +=1
    
 
 		# pass last_img_flag True
@@ -323,6 +323,7 @@ def download_allposts(hashtag):
 		print("We have one image/video")
 		elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src')
 		save_PostContent(hashtag, hashtag +'_postcnt_'+str(post_count))
+		print('added single image post')
 		post_count +=1
 		# with open(ht+".csv", 'wb') as f:
 		# 	f.write()
@@ -330,33 +331,44 @@ def download_allposts(hashtag):
 	
 	# while(True):
 	while(post_count<=8):
+		print("current post count", post_count)
 		next_el = next_post()
 		
 		if next_el != False:
+		# if next_el != 0:
 			next_el.click()
+			print("onto the next_el")
+			
 			time.sleep(3)
 			
 			try:
 				multiple_images = nested_check()
 				
 				if multiple_images:
+					print('next post has multiple images/vids')
 					nescheck = multiple_images
 					count_img = 0
 					
 					while nescheck:
-						elem_img = driver.find_element(By.CLASS_NAME,'rQDP3')
+						elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src') #_aagw
+						print("next post elem_img", elem_img)
+						# elem_img = driver.find_element(By.CLASS_NAME,'rQDP3')
 						save_PostContent(hashtag, hashtag+'/'+'_post_' +
 									str(c)+'_imgage'+str(count_img))
 						count_img += 1
-						nescheck.click()
+						# nescheck.click()
 						nescheck = nested_check()
-					save_PostContent(hashtag, hashtag+'_image'+str(c))
+					# save_PostContent(hashtag, hashtag+'_image'+str(c))
+					# post_count +=1
 
 					# save_content(hashtag+'/'+'content'+str(c) +
 					# 			'.'+str(count_img), elem_img, 1)
 				else:
+					elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src') #_aagw
+					print("next post elem_img", elem_img)
 					# save_content('_97aPb', hashtag+'/'+'content'+str(c))
 					save_PostContent(hashtag, hashtag+'_image'+str(c))
+					post_count +=1
 			
 			except selenium.common.exceptions.NoSuchElementException:
 				print("finished")
