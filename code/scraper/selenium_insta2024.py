@@ -15,6 +15,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 import pandas as pd
 import os
 
+# import PIL  
+# from PIL import Image  
+
 
 #get URl path
 def path():
@@ -52,20 +55,11 @@ def login(username, password, url):
 # function to get first post
 def first_post():
 	time.sleep(3)
-	# pic = driver.find_element("css selector","_aagu").click()
-	# pic = driver.find_element(By.CLASS_NAME,"_aagv").click() 
-	# pic = driver.find_element(By.CSS_SELECTOR,'span[class="html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs"]').click()
-	pic = driver.find_element(By.CSS_SELECTOR,'div[class="_aagw"]').click()
-	print("first_post pic:",pic)
+	# pic = driver.find_element(By.CSS_SELECTOR,'div[class="_aagw"]').click()
+	pic = driver.find_element(By.CSS_SELECTOR,'span[class="html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs"]').click()
+	print("opened first post")
+	# print("first_post pic:",pic)
 	print("first_post url", driver.current_url)
-	# pic = driver.find_element(By.CLASS_NAME,"_aagw") #.click()
-	# pic = driver.find_element(By.CLASS_NAME,"kIKUG").click()
-	# pic = driver.find_element(By.CLASS_NAME, "x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz _a6hd").get_attribute('href')
-	
-	
-	# popup_url = driver.find_element(By.TAG_NAME, "a").get_attribute('href')
-	# popup_url = driver.find_element(By.XPATH, './/a').get_attribute('onclick').split('(')[1].split(')')[0]
-	# print("popup_url:", popup_url) 
 
 	time.sleep(2)
 	return driver.current_url
@@ -74,8 +68,24 @@ def first_post():
 def next_post():
 	try:
 		# nex = driver.find_element(By.NAME,"coreSpriteRightPaginationArrow")
-		nex = driver.find_element("css selector","button[type='Next']").click()
+		# nex = driver.find_element("css selector","button[type='Next']").click()
+		nex = driver.find_element("css selector","svg[class='x1lliihq x1n2onr6 x175jnsf']").click()
+		
 		return nex
+	except selenium.common.exceptions.NoSuchElementException:
+		return 0
+	
+
+# function to check if the post is nested
+def nested_check():
+
+	try:
+		time.sleep(1)
+		nes_nex = driver.find_element(By.CSS_SELECTOR,"div[class=' _9zm2']")
+		# nes_nex = driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']")
+		print(nes_nex)
+		return nes_nex
+	
 	except selenium.common.exceptions.NoSuchElementException:
 		return 0
 
@@ -150,63 +160,79 @@ def save_PostContent(hashtag, img_name):
 	datetime = []
 	img_file = []
 
-	if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not None:
+	if nested_check() != 0:
+	# if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not None:
 		img_cnt = 1
 		if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:
 			vid_src = vid_src_alt(img_cnt)[0]
+			vid_src = vid_src.split("blob:")[-1]
 			video_src.append(vid_src)
+			mp4 = urllib.request.urlretrieve(vid_src, '{}.mp4'.format(img_call))
+			img_file.append(mp4[0])
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
-			# 	f.write(vid_src)
+			# 	f.write(mp4[0])			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
+			# mp4.save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.mp4')
 			img_cnt +=1
-
-			# driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']").click()
-			driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
+			nested_check().click()        
+			# driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
 		else:
 			src, alt, account, likes, comment, time = img_src_alt(img_cnt)
 			img_cnt +=1
 			img_src.append(src)
-			jpg = urllib.request.urlretrieve(img_src, '{}.jpg'.format(img_call))
-			print("jpg path", jpg)
-			img_file.append(jpg)
-			with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
-				f.write(jpg)
 			img__alt.append(alt)
 			accounts.append(account)
 			post_like.append(likes)
 			comments.append(comment)
 			datetime.append(time)
-			# tags.append(tag)
 
-			# driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']").click()
-			driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
+			jpg = urllib.request.urlretrieve(img_src, '{}.jpg'.format(img_call))
+			print("jpg path", jpg)
+			img_file.append(jpg[0])
+			# jpg[0].save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.jpg')
+			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
+			# 	f.write(jpg[0])
+
+			# tags.append(tag)
+   
+			nested_check().click()        
+
+			# driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
 	else:
 		img_cnt = 1
 		if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:
 			vid_src, account, likes, comment, time = vid_src_alt(img_cnt)
-			video_src.append(vid_src)
-			mp4 = urllib.request.urlretrieve(img_src, '{}.mp4'.format(img_call))
-			print("mp4 path", mp4)
-			img_file.append(mp4)
-			with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
-				f.write(mp4)
 			accounts.append(account)
 			post_like.append(likes)
 			comments.append(comment)
 			datetime.append(time)
+			vid_src = vid_src.split("blob:")[-1]
+			video_src.append(vid_src)
+			mp4 = urllib.request.urlretrieve(vid_src, '{}.mp4'.format(img_call))
+			print("mp4 path", mp4)
+			img_file.append(mp4[0])
+
+			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
+				# f.write(mp4)
+			# mp4[0].save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.mp4')
+
+
 			# tags.append(tag)
 		else:
 			src1, alt1, account, likes, comment, time = img_src_alt(img_cnt)
 			img_src.append(src1)
-			jpg = urllib.request.urlretrieve(img_src, '{}.jpg'.format(img_call))
-			print("jpg path", jpg)
-			img_file.append(jpg)
-			with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
-				f.write(jpg)
 			img__alt.append(alt1)
 			accounts.append(account)
 			post_like.append(likes)
 			comments.append(comment)
 			datetime.append(time)
+			jpg = urllib.request.urlretrieve(img_src, '{}.jpg'.format(img_call))
+			print("jpg path", jpg[0])
+			img_file.append(jpg[0])
+			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
+			# 	f.write(jpg[0])
+			# jpg[0].save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.jpg')
+
+
 			# tags.append(tag)
 	
 	#create data dictionary to save content as dataframe
@@ -238,25 +264,12 @@ def save_PostContent(hashtag, img_name):
 
 
 
-# function to check if the post is nested
-def nested_check():
-
-	try:
-		time.sleep(1)
-		# nes_nex = driver.find_element(By.CSS_SELECTOR,"button[type='Next']")
-		nes_nex = driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']")
-		print(nes_nex)
-		return nes_nex
-	
-	except selenium.common.exceptions.NoSuchElementException:
-		return 0
-
-
 def download_allposts(hashtag):
 
 	# open First Post
 	# print(" URL:", url)
 	first_post()
+	post_count = 1
     
 	# user_name = url.split('/')[-1]
 	# ht = url.split('/')[-1]
@@ -270,27 +283,33 @@ def download_allposts(hashtag):
 		# Create folder  
 		os.mkdir(str(hashtag))
 	# Check if Posts contains multiple images or videos
-	# multiple_images = nested_check()
-
-	if nested_check() != 0:
-		print("Post has multiple images")
+	multiple_images = nested_check()
+	
+    # if nested chexk exists, then the are multiple images in the post
+	if multiple_images:
+		print("Post has multiple images/videos")
 		nescheck = nested_check()
-		count_img = 1
-		images = []
+		count_img = 0
+		imagesrc = []
 		
+
+        #figure out why this is happening!!
 		while nescheck:
 			WebDriverWait(driver, 1.5)
 			elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src') #_aagw
 			print("elem_img", elem_img)
-			images.append(elem_img)  #added this to save the image
+			imagesrc.append(elem_img)  #added this to save the image
 			# save_content() #added this to save the image
 
 			# Function to save nested images
             # save_multiple(hashtag +'/'+'image'+str(count_img), elem_img)
 			count_img += 1
-			save_PostContent(hashtag, hashtag +'_post_'+str(count_img))
+			# next_post()
+			save_PostContent(hashtag, hashtag +'_imgcnt_'+str(count_img))
 			nescheck.click()
-			# nescheck = nested_check()
+			nescheck = nested_check()
+			post_count +=1
+   
 
 		# pass last_img_flag True
 		# save_multiple(hashtag +'/'+'content1.' +
@@ -301,13 +320,16 @@ def download_allposts(hashtag):
 		# this goes to the function above, which uses BS to look through the html and find the source image and other things
         # making my own function here for testing
 		# save_content('_aagv', hashtag+'/'+'content1') #_aagw
+		print("We have one image/video")
 		elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src')
-		save_PostContent(hashtag, hashtag +'_post_'+str(count_img))
+		save_PostContent(hashtag, hashtag +'_postcnt_'+str(post_count))
+		post_count +=1
 		# with open(ht+".csv", 'wb') as f:
 		# 	f.write()
 	c = 2
 	
-	while(True):
+	# while(True):
+	while(post_count<=8):
 		next_el = next_post()
 		
 		if next_el != False:
@@ -350,7 +372,7 @@ def download_allposts(hashtag):
 
 
 if __name__ == "__main__":
-	path()
+	# path()
 	username = "lwddissertation"
 	password = "Sandia005!"
 	# hashtag = "femicidioemergencianacional" 	
