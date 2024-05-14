@@ -205,8 +205,9 @@ def save_PostContent(hashtag, img_name):
 			driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
 	else:
 		img_cnt = 1
-		if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not False:
+		# if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not False:
 		# if driver.find_element(By.CSS_SELECTOR, 'div[class = " _9zm2"]') is not None:
+		if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:
 			print("getting single video post")
 			vid_src, account, likes, comment, time = vid_src_alt(img_cnt)
 			accounts.append(account)
