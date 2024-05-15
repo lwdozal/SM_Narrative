@@ -29,6 +29,15 @@ def path():
     driver = webdriver.Chrome()
 	# return driver
 
+# go to page url
+def url_name(url):
+	# global driver
+	# driver = webdriver.Chrome()
+	driver.get(url)
+    # webdriver will wait for 4 sec before throwing a
+    # NoSuchElement exception so that the element
+    # is detected and not skipped.
+	time.sleep(4)
 
 def login(username, password, url):
     global driver
@@ -73,14 +82,14 @@ def next_post():
 	time.sleep(1.5)
 	try:
 		# nex = driver.find_element(By.NAME,"coreSpriteRightPaginationArrow")
-		# nex = driver.find_element("css selector","button[type='Next']").click()
+		nex = driver.find_element("css selector","button[type='Next']") #.click()
 
 		# nex = driver.find_element(By.CSS_SELECTOR,"button[class='_abl-'] > div[class='_abm0']")
 		# nex = driver.find_element(By.XPATH,"_abm0")
 		# nex = driver.find_element("css selector","svg[class='x1lliihq x1n2onr6 x175jnsf']")
 
 		# nex = driver.find_element(By.CSS_SELECTOR,"div[class='_abm0']")
-		nex = driver.find_element(By.CSS_SELECTOR,"div[class='_abm0'] > span[style='display: inline-block; transform: rotate(90deg);'] > svg > path[d='M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z']")
+		# nex = driver.find_element(By.CSS_SELECTOR,"div[class='_abm0'] > span[style='display: inline-block; transform: rotate(90deg);'] > svg > path[d='M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z']")
 		# nex = driver.find_element(By.CSS_SELECTOR,"*[class='x1lliihq x1n2onr6 x175jnsf']")
 		
 		return nex
@@ -209,7 +218,7 @@ def save_carousel_post(hashtag, img_name):
 	if video_check() != None:
 	# if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:	
 		print("a video starts off the carousel")
-		img_cnt =1
+		img_cnt =+1
 		vid_src, thumbnail_src, account, likes, comment, time = vid_src_alt(hashtag, img_cnt, img_call)
 		accounts.append(account)
 		post_like.append(likes)
@@ -223,7 +232,7 @@ def save_carousel_post(hashtag, img_name):
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# 	f.write(mp4[0])			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# mp4.save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.mp4')
-		img_cnt += 1
+		# img_cnt += 1
 		print("image count", img_cnt)
 
 			# nested_check().click()        
@@ -232,7 +241,7 @@ def save_carousel_post(hashtag, img_name):
 
 	elif video_check() == None:
 		print("an image starts off the carousel")
-		img_cnt =1
+		img_cnt +=1
 		src, alt, account, likes, comment, time = img_src_alt(hashtag, img_cnt, img_call)
 		img_src.append(src)
 		img__alt.append(alt)
@@ -240,7 +249,7 @@ def save_carousel_post(hashtag, img_name):
 		post_like.append(likes)
 		comments.append(comment)
 		datetime.append(time)
-		img_cnt +=1
+		# img_cnt +=1
 		print("image count", img_cnt)
 		# jpg = urllib.request.urlretrieve(src, hashtag + '/{}.jpg'.format(img_call))
 		# print("jpg path", jpg)
@@ -498,7 +507,7 @@ def download_allposts(hashtag):
 
 
 if __name__ == "__main__":
-	# path()
+	path()
 	username = "lwddissertation"
 	password = "Sandia005!"
 	# hashtag = "femicidioemergencianacional" 	
@@ -509,11 +518,11 @@ if __name__ == "__main__":
 
 
     #### works?
-	# url_name(url)
+	url_name(url)
 	# login(username, password, url)
 	# scroll(hashtag)
 	# testlinks = post_urls(hashtag)
     ####
-	login(username, password, url)
+	# login(username, password, url)
 	download_allposts(hashtag)
  
