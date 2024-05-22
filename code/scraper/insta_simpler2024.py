@@ -82,13 +82,15 @@ def next_post():
 	time.sleep(1.5)
 	try:
 		# nex = driver.find_element(By.NAME,"coreSpriteRightPaginationArrow")
-		nex = driver.find_element("css selector","button[type='Next']") #.click()
+		# nex = driver.find_element("css selector","button[type='Next']") #.click()
 
 		# nex = driver.find_element(By.CSS_SELECTOR,"button[class='_abl-'] > div[class='_abm0']")
 		# nex = driver.find_element(By.XPATH,"_abm0")
 		# nex = driver.find_element("css selector","svg[class='x1lliihq x1n2onr6 x175jnsf']")
 
-		# nex = driver.find_element(By.CSS_SELECTOR,"div[class='_abm0']")
+		# nex = driver.find_element(By.CSS_SELECTOR,"div[class='_abm0']") #gets previous too
+		nex = driver.find_element(By.CSS_SELECTOR,"div[class=' _aaqg _aaqh']") # _abl-
+
 		# nex = driver.find_element(By.CSS_SELECTOR,"div[class='_abm0'] > span[style='display: inline-block; transform: rotate(90deg);'] > svg > path[d='M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z']")
 		# nex = driver.find_element(By.CSS_SELECTOR,"*[class='x1lliihq x1n2onr6 x175jnsf']")
 		
@@ -118,40 +120,130 @@ def video_check():
 	except selenium.common.exceptions.NoSuchElementException:
 		print("Did not find video")
 		return None
+	
+
+def likes_check():
+	print("checking for likes")
+	try:
+		likes = driver.find_element(By.CSS_SELECTOR,"span[class='html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs']").text
+		return likes
+	except selenium.common.exceptions.NoSuchElementException:
+		print("Did not find likes")
+		return None
 
 def download_img(hashtag, img_src, img_cnt, img_call):
 	img_Data = requests.get(img_src).content
-	with open(hashtag + "/" + img_call + "_"+str(img_cnt)+"_.jpg", 'wb') as handler:
+	with open(hashtag + "01/" + img_call + "_"+str(img_cnt)+".jpg", 'wb') as handler:
 		handler.write(img_Data)
-		
+
+def first_image(hashtag, img_call, c):
+	WebDriverWait(driver, 3)
+	
+	html = driver.page_source
+	# print(html)
+	soup = bs(html, 'html.parser')
+	img_source_first = soup.findAll('div', class_="_aagv")[-2].find('img')['src']
+	print("img_source",img_source_first)
+	img_alt_first = soup.findAll('div', class_="_aagv")[-2].find('img')['alt']
+	jpg_first = urllib.request.urlretrieve(img_source_first, hashtag + '_' + img_call + '_{}firstmby.jpg'.format(c))
+
+	comment = driver.find_element(By.CSS_SELECTOR, 'h1[class = "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+	print("Comment:", comment)
+	account = driver.find_element(By.CSS_SELECTOR, "a[class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']").text		
+	print("account",account)
+	time = driver.find_element(By.CSS_SELECTOR,"time[class='x1p4m5qa']").get_attribute("datetime")
+	print("DateTime:", time)
+
+	if likes_check() != None:
+		likes = driver.find_element(By.CSS_SELECTOR,"span[class='html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs']").text
+		print("likes",likes)
+	else:
+		likes = 1
+		print("likes",likes)
+
+    #save everything to csv
+	s1 = pd.Series(driver.current_url, name='URL')
+	s2 = pd.Series(img_call, name='img_name')
+	s3 = pd.Series(img_source_first, name='img_src')
+	s4 = pd.Series(img_alt_first, name='img__alt')
+	s5 = pd.Series(account, name='accounts')
+	s6 = pd.Series(likes, name='like_count')
+	s7 = pd.Series(comment, name='initial_comment')
+	s8 = pd.Series(time, name='datetime')
+	s9 = pd.Series(jpg_first[0], name='post_file')
+	s10 = pd.Series("", name='video_src')
+	s11 = pd.Series(hashtag + '/'+ img_call + ".jpg", name='file_path')
+	df = pd.concat([s1,s2, s3,s4,s5,s6,s7,s8,s9,s10, s11], axis=1)
+	#append df to existing csv (create one before running)
+	df.to_csv('content.csv', mode='a', header=False)
+	print("First Post Data appended successfully.")
+	# return img_source_first, img_alt_first
+
+
 
 def img_src_alt(hashtag, img_cnt, img_call):
 	WebDriverWait(driver, 3)
 	print('located image')
+	# img_alts = []
+	# img_srcs = []
 	# current_url = driver.current_url
         # get the 'main' page content to make our lives better
 	html = driver.page_source
 	# print(html)
 	soup = bs(html, 'html.parser')
-	img_source = soup.findAll('div', class_="_aagv")[-1].find('img')['src']
-	img_source_alt = soup.findAll('div', class_="_aagv")[-1].find('img')['alt']
-	# first_image = driver.find_element(By.CSS_SELECTOR, 'div[class="_aagv"], [style="padding-bottom: 120.208%;"] > img').get_attribute("src") #img
-	# first_image = driver.find_element(By.CSS_SELECTOR, 'li[class="_acaz"] > div[class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1"] > div[class = "x1qjc9v5 x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x78zum5 xdt5ytf x2lah0s xk390pu xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 xggy1nq x11njtxf"] > div > div[class="_aagu _aato"] > div[class="_aagv"] > img').get_attribute("src") #img
-	print("image source", img_source)
-	download_img(hashtag, img_source, img_cnt, img_call)
-	# first_image_alt = driver.find_element(By.CSS_SELECTOR,"div._aagv > img.alt").text
-	# img_source_alt = soup.find('div', class_="_aagv", style="padding-bottom: 120.208%;").find('img')['alt']
-	print("image_alt", img_source_alt)
 	
-	if img_cnt <= 1:
-		comment = driver.find_element(By.CSS_SELECTOR, 'h1[class = "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
-		print("Comment:", comment)
-		account = driver.find_element(By.CSS_SELECTOR, "a[class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']").text
-		print("account",account)
+	###test
+	# imgs = {src for src in soup.findAll('div', class_="_aagv")}
+	# i=0
+	# for img in imgs:
+	# 	i += 1
+	# 	print('img in for loop', img)
+	# 	img_src = img.find('img')['src']
+	# 	jpg = urllib.request.urlretrieve(img_src, hashtag + '/' + img_call + str(i) + '_{}.jpg'.format(img_cnt))
+
+	# 	# download_img(hashtag, img_src, img_cnt, img_call + str(i))
+	# 	print("img_src in for loop", img_src)
+	# 	img_srcs.append(img_src)
+
+	# 	img_alt = img.find('img')['alt']
+	# 	print("img_alt in for loop", img_alt)
+	# 	img_alts.append(img_alt)
+	### end test 
+
+    #use
+	img_source = soup.findAll('div', class_="_aagv")[-1].find('img')['src']
+	print("img_source",img_source)
+	# print("img_sourceAll",img_source)
+	# img_source_first = soup.find(attrs={"class":'_aagv'}).find('img')['src']
+	# img_source_first = img_source.next_element
+	# print("img_source_first",img_source_first)
+	# img_source_first = img_source_first('img')['src']
+	WebDriverWait(driver, 3)
+	img_source_alt = soup.findAll('div', class_="_aagv")[-1].find('img')['alt']
+	print("image_alt", img_source_alt)
+	# img_alt_first = soup.find(attrs={"class":'_aagv'}).find('img')['alt']
+	# print("img_alt_first",img_alt_first)
+	download_img(hashtag, img_source, img_cnt, img_call)
+	jpg = urllib.request.urlretrieve(img_source, hashtag + '01/' + img_call + '_{}.jpg'.format(img_cnt))
+
+    ##
+
+
+	### continue to use
+	# if img_cnt <= 1:
+	comment = driver.find_element(By.CSS_SELECTOR, 'h1[class = "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+	print("Comment:", comment)
+	account = driver.find_element(By.CSS_SELECTOR, "a[class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']").text		
+	print("account",account)
+	time = driver.find_element(By.CSS_SELECTOR,"time[class='x1p4m5qa']").get_attribute("datetime")
+	print("DateTime:", time)
+
+	if likes_check() != None:
 		likes = driver.find_element(By.CSS_SELECTOR,"span[class='html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs']").text
 		print("likes",likes)
-		time = driver.find_element(By.CSS_SELECTOR,"time[class='x1p4m5qa']").get_attribute("datetime")
-		print("DateTime:", time)
+	else:
+		likes = 1
+		print("likes",likes)
 		# tags = driver.find_elements(By.CSS_SELECTOR, 'h1[class="x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz notranslate _a6hd]')
 		
 		# l = elem.get_attribute('innerHTML')
@@ -159,8 +251,8 @@ def img_src_alt(hashtag, img_cnt, img_call):
 		# tags = html.find_all('a')
 		# print("tags", tags)
 
-
 	return (img_source, img_source_alt, account, likes, comment, time)
+	# return (img_srcs, img_alts, account, likes, comment, time)
 
 
 def vid_src_alt(hashtag, img_cnt, img_call):
@@ -172,17 +264,23 @@ def vid_src_alt(hashtag, img_cnt, img_call):
 	thumbnail_src = driver.find_element(By.CSS_SELECTOR, 'div[class = "_aagv"] > img').get_attribute("src") #img
 	print("thumbnail_src", thumbnail_src)
 	download_img(hashtag, thumbnail_src, img_cnt, img_call)
+	jpg = urllib.request.urlretrieve(thumbnail_src, hashtag + '01/' + img_call + '_{}.jpg'.format(img_cnt))
 
 
-	if img_cnt <= 1:
-		comment = driver.find_element(By.CSS_SELECTOR, 'h1[class= "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
-		print("Comment", comment)
-		account = driver.find_element(By.CSS_SELECTOR, "a[class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']").text
-		print("account",account)
+
+	# if img_cnt <= 1:
+	comment = driver.find_element(By.CSS_SELECTOR, 'h1[class= "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+	print("Comment", comment)
+	account = driver.find_element(By.CSS_SELECTOR, "a[class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']").text
+	print("account",account)
+	time = driver.find_element(By.CSS_SELECTOR,"time[class='x1p4m5qa']").get_attribute("datetime")
+	print("DateTime:", time)
+	if likes_check() != None:
 		likes = driver.find_element(By.CSS_SELECTOR,"span[class='html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs']").text
 		print("likes",likes)
-		time = driver.find_element(By.CSS_SELECTOR,"time[class='x1p4m5qa']").get_attribute("datetime")
-		print("DateTime:", time)
+	else:
+		likes = 1
+		print("likes",likes)
 		# tags = driver.find_elements(By.CSS_SELECTOR, 'h1[class="x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz notranslate _a6hd]')
 
 		
@@ -209,6 +307,7 @@ def save_carousel_post(hashtag, img_name):
 	datetime = []
 	img_file = []
 	video_src = []
+	img_cnt = 0
 
 
 	# if nested_check() != 0:
@@ -218,7 +317,6 @@ def save_carousel_post(hashtag, img_name):
 	if video_check() != None:
 	# if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:	
 		print("a video starts off the carousel")
-		img_cnt =+1
 		vid_src, thumbnail_src, account, likes, comment, time = vid_src_alt(hashtag, img_cnt, img_call)
 		accounts.append(account)
 		post_like.append(likes)
@@ -227,8 +325,9 @@ def save_carousel_post(hashtag, img_name):
 		vid_src = vid_src.split("blob:")[-1]
 		video_src.append(vid_src)
 		img_src.append(thumbnail_src)
-		mp4 = urllib.request.urlretrieve(vid_src, hashtag + '/{}.mp4'.format(img_call))
-		img_file.append(mp4[0])
+		jpg = urllib.request.urlretrieve(vid_src, img_name +'_{}.jpg'.format(img_call))
+		img_file.append(jpg[0])
+		img_cnt +=1
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# 	f.write(mp4[0])			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# mp4.save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.mp4')
@@ -241,8 +340,9 @@ def save_carousel_post(hashtag, img_name):
 
 	elif video_check() == None:
 		print("an image starts off the carousel")
-		img_cnt +=1
 		src, alt, account, likes, comment, time = img_src_alt(hashtag, img_cnt, img_call)
+		# img_src.append(first_img)
+		# img_src.append(first_alt)
 		img_src.append(src)
 		img__alt.append(alt)
 		accounts.append(account)
@@ -251,9 +351,14 @@ def save_carousel_post(hashtag, img_name):
 		datetime.append(time)
 		# img_cnt +=1
 		print("image count", img_cnt)
+		# for i in src:
+		jpg = urllib.request.urlretrieve(src, img_name + '_{}.jpg'.format(img_call))
+		print("jpg path", jpg[0])
+		img_file.append(jpg[0])
 		# jpg = urllib.request.urlretrieve(src, hashtag + '/{}.jpg'.format(img_call))
 		# print("jpg path", jpg)
 		# img_file.append(jpg[0])
+		img_cnt +=1
 		
 
 
@@ -272,7 +377,7 @@ def save_carousel_post(hashtag, img_name):
 		
     #save everything to csv
 	s1 = pd.Series(driver.current_url, name='URL')
-	s2 = pd.Series(img_name, name='hashtag')
+	s2 = pd.Series(img_name, name='img_name')
 	s3 = pd.Series(img_src, name='img_src')
 	s4 = pd.Series(img__alt, name='img__alt')
 	s5 = pd.Series(accounts, name='accounts')
@@ -281,7 +386,7 @@ def save_carousel_post(hashtag, img_name):
 	s8 = pd.Series(datetime, name='datetime')
 	s9 = pd.Series(img_file, name='post_file')
 	s10 = pd.Series(video_src, name='video_src')
-	s11 = pd.Series(hashtag + '/'+img_call + ".jpg", name='file_path')
+	s11 = pd.Series(hashtag + '/'+ img_name + img_call + ".jpg", name='file_path')
 	df = pd.concat([s1,s2, s3,s4,s5,s6,s7,s8,s9,s10, s11], axis=1)
 	#append df to existing csv (create one before running)
 	df.to_csv('content.csv', mode='a', header=False)
@@ -303,7 +408,7 @@ def save_sngl_content_post(hashtag, img_name):
 	datetime = []
 	img_file = []
 	video_src = []
-	img_cnt = 1
+	img_cnt = 0
 		# if driver.find_element(By.CSS_SELECTOR,"svg[aria-label='Carousel']") is not False:
 		# if driver.find_element(By.CSS_SELECTOR, 'div[class = " _9zm2"]') is not None:
 	if video_check() is not None:
@@ -316,10 +421,10 @@ def save_sngl_content_post(hashtag, img_name):
 		img_src.append(thumbnail_src)
 		vid_src = vid_src.split("blob:")[-1]
 		video_src.append(vid_src)
-		mp4 = urllib.request.urlretrieve(vid_src, hashtag + '/{}.mp4'.format(img_call))
-		print("mp4 path", mp4)
-		img_file.append(mp4[0])
-			# img_cnt += 1
+		jpg = urllib.request.urlretrieve(vid_src, img_name + '{}.jpg'.format(img_call))
+		print("mp4 path", jpg)
+		img_file.append(jpg[0])
+		img_cnt += 1
 
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 				# f.write(mp4)
@@ -336,9 +441,10 @@ def save_sngl_content_post(hashtag, img_name):
 		post_like.append(likes)
 		comments.append(comment)
 		datetime.append(time)
-		jpg = urllib.request.urlretrieve(src1, hashtag + '/{}.jpg'.format(img_call))
+		jpg = urllib.request.urlretrieve(src1, img_name + '{}.jpg'.format(img_call))
 		print("jpg path", jpg[0])
 		img_file.append(jpg[0])
+		img_cnt +=1
 			# with open(hashtag + '/cnt_'+str(img_cnt)+img_call, 'wb') as f:
 			# 	f.write(jpg[0])
 			# jpg[0].save(hashtag+'/cnt_'+str(img_cnt)+img_call+'.jpg')	
@@ -353,7 +459,7 @@ def save_sngl_content_post(hashtag, img_name):
 	s8 = pd.Series(datetime, name='datetime')
 	s9 = pd.Series(img_file, name='post_file')
 	s10 = pd.Series(video_src, name='video_src')
-	s11 = pd.Series(hashtag + '/'+img_call, name='file_path')
+	s11 = pd.Series(hashtag + '/'+ img_name + img_call + ".jpg", name='file_path')
 	df = pd.concat([s1,s2, s3,s4,s5,s6,s7,s8,s9,s10, s11], axis=1)
 	#append df to existing csv (create one before running)
 	df.to_csv('content.csv', mode='a', header=False)
@@ -380,10 +486,7 @@ def download_allposts(hashtag):
 	
 	first_post()
     
-	# user_name = url.split('/')[-1]
-	# ht = url.split('/')[-1]
-	
-	print("New URL:", driver.current_url)
+
 	#make sure you're in the correct folder anytime
 	parent_path = os.getcwd()
 
@@ -416,11 +519,11 @@ def download_allposts(hashtag):
 			count_img += 1
 			# next_post()
 			# save_PostContent(hashtag, hashtag +'_imgcnt_'+str(count_img))
-			save_carousel_post(hashtag, hashtag +'_imgcnt_'+str(count_img))
+			save_carousel_post(hashtag, hashtag+'/'+'_post_' + str(post_count)+'_image_0'+str(count_img))
 			print("added multiple image post")
 			nescheck.click()
 			nescheck = nested_check()
-			post_count +=1
+			count_img +=1
    
 
 		# pass last_img_flag True
@@ -435,7 +538,8 @@ def download_allposts(hashtag):
 		print("We have one image/video")
 		post_count = 1
 		# elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src')
-		save_sngl_content_post(hashtag, hashtag +'_imgcnt_'+str(post_count))
+		save_sngl_content_post(hashtag, hashtag+'/'+'_post_' + str(post_count)+'_image0')
+		#hashtag+'/'+'_post_' +	str(c)+'_image'+str(count_img)
         # save_PostContent(hashtag, hashtag +'_postcnt_'+str(post_count))
 		print('added single image post')
 		post_count +=1
@@ -446,9 +550,11 @@ def download_allposts(hashtag):
 	c = 2
 	
 	# while(True):
-	while(c <= 8):
+	while(c <= 500):
+		print("c: ", c)
 		print("current post count", post_count)
 		next_el = next_post()
+		print("next_el", next_el)
 		
 		if next_el != False:
 		# if next_el != 0:
@@ -463,14 +569,26 @@ def download_allposts(hashtag):
 			if multiple_images:
 				print('next post has multiple images/vids')
 				nescheck = multiple_images
+				
+				
+				img_url = driver.current_url
+				img_call = img_url.split('/')[-2]
+				print("New URL:", img_call)
+
+    			#get the first image of each carousel post because the above code doesn't
+				first_image(hashtag, img_call, c)
+                #get the number of images in the post
 				count_img = 0
 					
 				while nescheck:
 					# elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src') #_aagw
 					# print("next post elem_img", elem_img)
+
+
+					
 					# elem_img = driver.find_element(By.CLASS_NAME,'rQDP3')
 					save_carousel_post(hashtag, hashtag+'/'+'_post_' +
-								str(c)+'_imgage'+str(count_img))						
+								str(c)+'_image_0'+str(count_img))						
                        # save_PostContent(hashtag, hashtag+'/'+'_post_' +
 									# str(c)+'_imgage'+str(count_img))
 					count_img += 1
@@ -485,7 +603,8 @@ def download_allposts(hashtag):
 				# elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src') #_aagw
 				# print("single post - next post elem_img", elem_img)
 					# save_content('_97aPb', hashtag+'/'+'content'+str(c))
-				save_sngl_content_post(hashtag, hashtag+'_image'+str(c))
+				save_sngl_content_post(hashtag, hashtag+ '/'+'_post_' +
+								str(c)+'_image_0'+str(c))
 					# save_PostContent(hashtag, hashtag+'_image'+str(c))
 				print("saved single post")
 				post_count +=1
@@ -500,9 +619,29 @@ def download_allposts(hashtag):
 			break
 		
 		c += 1
-	driver.close()
+	# driver.close()
 	return
 
+
+def scroll(hashtag):
+	time.sleep(10)
+	scrolldown = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var scrolldown = document.body.scrollHeight;return scrolldown;")
+	match = False
+	# postUrls = []
+	# postUrls.append(post_urls(hashtag))
+	while(match == False):
+		last_count = scrolldown
+		# print("postUrls", postUrls)
+		time.sleep(15)
+		download_allposts(hashtag)
+		scrolldown = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var scrolldown=document.body.scrollHeight;return scrolldown;")
+		time.sleep(15)
+		if last_count == scrolldown:
+			download_allposts(hashtag)
+			match = True
+	driver.close()
+	# postUrls = pd.DataFrame(postUrls)
+	# postUrls.to_csv(hashtag + 'post_urls.csv', index=False, header=False)
 
 
 
@@ -511,18 +650,18 @@ if __name__ == "__main__":
 	username = "lwddissertation"
 	password = "Sandia005!"
 	# hashtag = "femicidioemergencianacional" 	
-	hashtag = "niunamenos"
+	# hashtag = "niunamenos"
+	hashtag = "femicideinmexico" 	
 
     # url = 'https://instagram.com//explore/tags/' + hashtag + "/" #assign urlurl = 'https://www.instagram.com/explore/search/keyword/?q=' + hashtag
 	url = 'https://www.instagram.com/explore/search/keyword/?q=' + hashtag
 
 
     #### works?
-	url_name(url)
-	# login(username, password, url)
-	# scroll(hashtag)
+	# url_name(url)
+	login(username, password, url)
+	scroll(hashtag)
 	# testlinks = post_urls(hashtag)
     ####
 	# login(username, password, url)
-	download_allposts(hashtag)
  
