@@ -145,7 +145,7 @@ def first_image(hashtag, img_call, c):
 	img_source_first = soup.findAll('div', class_="_aagv")[-2].find('img')['src']
 	print("img_source",img_source_first)
 	img_alt_first = soup.findAll('div', class_="_aagv")[-2].find('img')['alt']
-	jpg_first = urllib.request.urlretrieve(img_source_first, hashtag + '_' + img_call + '_{}firstmby.jpg'.format(c))
+	jpg_first = urllib.request.urlretrieve(img_source_first, hashtag+'/'+ img_call + 'post_{}firstmby.jpg'.format(str(c)))
 
 	comment = driver.find_element(By.CSS_SELECTOR, 'h1[class = "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
 	print("Comment:", comment)
@@ -163,7 +163,7 @@ def first_image(hashtag, img_call, c):
 
     #save everything to csv
 	s1 = pd.Series(driver.current_url, name='URL')
-	s2 = pd.Series(img_call, name='img_name')
+	s2 = pd.Series(hashtag + img_call + '_post_'+str(c), name='img_name')
 	s3 = pd.Series(img_source_first, name='img_src')
 	s4 = pd.Series(img_alt_first, name='img__alt')
 	s5 = pd.Series(account, name='accounts')
