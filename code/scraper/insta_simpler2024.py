@@ -111,6 +111,7 @@ def nested_check():
 		return nes_nex
 	
 	except selenium.common.exceptions.NoSuchElementException:
+		print("Found all posts")
 		return 0
 	
 def video_check():
@@ -137,7 +138,7 @@ def download_img(hashtag, img_src, img_cnt, img_call):
 	with open(hashtag + "01/" + img_call + "_"+str(img_cnt)+".jpg", 'wb') as handler:
 		handler.write(img_Data)
 
-def first_image(hashtag, img_call, img_name):
+def first_image(hashtag, img_call, c):
 	WebDriverWait(driver, 3)
 	
 	html = driver.page_source
@@ -146,7 +147,7 @@ def first_image(hashtag, img_call, img_name):
 	img_source_first = soup.findAll('div', class_="_aagv")[-2].find('img')['src']
 	print("img_source",img_source_first)
 	img_alt_first = soup.findAll('div', class_="_aagv")[-2].find('img')['alt']
-	jpg_first = urllib.request.urlretrieve(img_source_first, img_name + 'post_{}firstmby.jpg'.format(img_call))
+	jpg_first = urllib.request.urlretrieve(img_source_first, hashtag+'/'+ img_call + 'post_{}firstmby.jpg'.format(str(c)))
 
 	comment = driver.find_element(By.CSS_SELECTOR, 'h1[class = "_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
 	print("Comment:", comment)
@@ -165,7 +166,7 @@ def first_image(hashtag, img_call, img_name):
     #save everything to csv
 	s1 = pd.Series(driver.current_url, name='URL')
 	# s2 = pd.Series(hashtag + img_call + '_post_'+str(c), name='img_name')
-	s2 = pd.Series(img_name, name='img_name')
+	s2 = pd.Series(img_call, name='img_name')
 	s3 = pd.Series(img_source_first, name='img_src')
 	s4 = pd.Series(img_alt_first, name='img__alt')
 	s5 = pd.Series(account, name='accounts')
@@ -174,7 +175,7 @@ def first_image(hashtag, img_call, img_name):
 	s8 = pd.Series(time, name='datetime')
 	s9 = pd.Series(jpg_first[0], name='post_file')
 	s10 = pd.Series("", name='video_src')
-	s11 = pd.Series(hashtag + '/'+ img_call + ".jpg", name='file_path')
+	s11 = pd.Series(hashtag + '/'+ img_call + 'post_{}firstmby.jpg'.format(str(c)), name='file_path')
 	df = pd.concat([s1,s2, s3,s4,s5,s6,s7,s8,s9,s10, s11], axis=1)
 	#append df to existing csv (create one before running)
 	df.to_csv('content.csv', mode='a', header=False)
@@ -208,7 +209,7 @@ def img_src_alt(hashtag, img_cnt, img_call):
 	# img_alt_first = soup.find(attrs={"class":'_aagv'}).find('img')['alt']
 	# print("img_alt_first",img_alt_first)
 	download_img(hashtag, img_source, img_cnt, img_call)
-	jpg = urllib.request.urlretrieve(img_source, hashtag + '01/' + img_call + '_{}.jpg'.format(img_cnt))
+	jpg = urllib.request.urlretrieve(img_source, hashtag + '01/' + img_call + '_{}.jpg'.format(str(img_cnt)))
 
     ##
 
@@ -348,7 +349,7 @@ def save_carousel_post(hashtag, img_name):
 
 
 
-	# print("found carousel")
+	print("found carousel")
 	if video_check() != None:
 	# if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:	
 		print("a video starts off the carousel")
@@ -666,7 +667,7 @@ def download_allposts(hashtag):
 
 		# with open(ht+".csv", 'wb') as f:
 		# 	f.write()
-	c = 2
+	c = 17
 	
 	# while(True):
 	while(c <= 500):
@@ -679,7 +680,8 @@ def download_allposts(hashtag):
 		# if next_el != 0:
 			next_el.click()
 			print("onto the next_el")
-			
+			count_img = 0
+
 			time.sleep(3)
 			
 			# try:
@@ -688,25 +690,23 @@ def download_allposts(hashtag):
 			if multiple_images:
 				print('next post has multiple images/vids')
 				nescheck = multiple_images
-				
-				
+
 				img_url = driver.current_url
 				img_call = img_url.split('/')[-2]
 				print("New URL:", img_call)
-				count_img = 0
 
     			#get the first image of each carousel post because the above code doesn't
-				first_image(hashtag, img_call, hashtag+'/'+'post_' +
-								str(c)+'_image_0'+str(count_img))
+				# first_image(hashtag, img_call, hashtag+'/'+'post_' +
+				# 				str(c)+'_image_0'+str(count_img))
+				first_image(hashtag, img_call, c)
                 #get the number of images in the post
+				# count_img = 0
 				count_img +=1
 					
 				while nescheck:
 					# elem_img = driver.find_element(By.CLASS_NAME,'_aagv').get_attribute('src') #_aagw
 					# print("next post elem_img", elem_img)
-
-
-					
+	
 					# elem_img = driver.find_element(By.CLASS_NAME,'rQDP3')
 					save_carousel_post(hashtag, hashtag+'/'+'post_' +
 								str(c)+'_image_0'+str(count_img))						
@@ -725,11 +725,12 @@ def download_allposts(hashtag):
 				# print("single post - next post elem_img", elem_img)
 					# save_content('_97aPb', hashtag+'/'+'content'+str(c))
 				save_sngl_content_post(hashtag, hashtag+ '/'+'post_' +
-								str(c)+'_image_0'+str(c))
+								str(c))
 					# save_PostContent(hashtag, hashtag+'_image'+str(c))
 				print("saved single post")
 				post_count +=1
-				next_post().click()
+				# next_post().click()
+				# next_post()
 
 			
 			# except selenium.common.exceptions.NoSuchElementException:
