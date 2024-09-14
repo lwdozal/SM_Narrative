@@ -1,9 +1,3 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
-
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
-
-```{r}
-1 + 1
-```
+**Abstract:** Social movements have been using social media to share their goals, values, and grievances with the world for the past decade. This information is spread throughout platforms usually in visual form, and from various perspectives. This information can be seen as fragmented and not fully informative. To solve this problem, this research uses mixed methods applications to understand narrative frames of online image content representing the anti-femicide movement in Mexico. This social movement is highlighted due to consistent social media messaging throughout the past decade with a recent increase in activity. This information also represents multiple perspectives from across the country. The methods used will work in tangent to first use deep learning models to classify narrative frames based on themes from academic literature, non-governmental organizations, and government. These frames are visualized in network form for experts in the anti-femicide movement. These experts will form a focus group to implement Gillian Rose’s visual interpretation modalities to create an ontology of image relations. The ontology will be used in a knowledge graph which links dynamic data. This research offers theoretical contributions to computer vision, online social movement frames and images. It holds practical implications for computational social scientists using artificial intelligence to understand social phenomena.

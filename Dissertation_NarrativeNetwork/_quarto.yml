@@ -8,21 +8,23 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
-    - part: "Motivation"
-      chapters: 
-      - feminicideFrames.qmd
-    - summary.qmd
+    # - part: "Motivation"
+    #   chapters: 
+    - SM_fragmentation.qmd
+    - feminicideFrames.qmd
+    # - summary.qmd
     - references.qmd
-
 bibliography: references.bib
+    # bibliographystyle: IEEE
 
 format:
   html:
     theme: cosmo
   pdf:
     documentclass: scrreprt
-  docx:
-    reference-doc: diss_reference.docx
+    cite-method: biblatex
+  # docx:
+  #   reference-doc: diss_reference.docx
 
 editor: visual
 
