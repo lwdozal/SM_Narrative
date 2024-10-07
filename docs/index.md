@@ -1,6 +1,7 @@
-# Social Movement Narrative: Identifying frames in online social movement images.
+# Social Movement Narrative Network: Visual Narrative Analysis of the Online Anti-Femicide Movement in Mexico
 
-Space to build the informational website for the dissertation project: Narrative Frames in Topical Images: Mixed Methods Approach to Understanding Social Movements
+This dissertation research explores how fragmented social media messaging about a particular social movement (the anti-feminicide movement) is represented as an overall narrative. Social movements have been using social media to share their goals, values, and grievances with the world for the past decade which spreads throughout platforms usually in visual form.This messaging is sprinkled in with other news and cultural events that fail to provide a full narrative of what is actually happening. I analyze the visual and textual narrative representations of the anti-feminicide movement in Mexico online using narrative structure, network science, visual analysis, and a combination of multi-modal computer vision / natural language processing models. The project considers various aspects of the research question including: data mapping by social movement practitioners; the network of different narrative frames based on semantic qualities and distinct features in social media posts; and biases provided by affordances (including algorithmic) of Instagram. The goal of this open science AI project is to find a more clear way to understand fragmented news on social media platforms by evaluating relationships between posts.
+
 
 [Download the dissertation prospectus](pdfs/ldozal_prospectus2023.pdf)
 
