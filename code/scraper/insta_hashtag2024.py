@@ -40,15 +40,12 @@ def url_name(url):
     # is detected and not skipped.
 	time.sleep(15)
 
-def login(username, password, url):
+def login(url):
     global driver
     driver = webdriver.Chrome()
 
-    # log_but = driver.find_element("css selector","L3NKy")
 #taken from other source
 ######## Connect to instagram
-    # driver.get("https://www.instagram.com/")
-    # driver.maximize_window() #get full page
     driver.get(url)
 
     ####### Log in to Instagram
@@ -57,8 +54,8 @@ def login(username, password, url):
     password=driver.find_element("css selector","input[name='password']")
     username.clear() #clear default text in input area
     password.clear() #clear default text in input area
-    username.send_keys("lwddissertation")
-    password.send_keys("YngweiMalmsteen")
+    username.send_keys("ADD_USERNAME")
+    password.send_keys("ADD_PASSWORD")
     # username.send_keys(username)
     # password.send_keys(password)
     login = driver.find_element("css selector","button[type='submit']").click()
@@ -331,27 +328,6 @@ def save_carousel_post(hashtag, img_name):
 
 
 
-	# print("found carousel using image_info Function")
-	# src, alt, account, likes, comment, time = image_info(hashtag, img_cnt, img_call)
-	# # src, alt, account, likes, comment, time = img_src_alt(hashtag, img_cnt, img_call)
-	# img_src.append(src)
-	# img__alt.append(alt)
-	# accounts.append(account)
-	# post_like.append(likes)
-	# comments.append(comment)
-	# datetime.append(time)
-	# # img_cnt +=1
-	# print("image count", img_cnt)
-	# # for i in src:
-	# jpg = urllib.request.urlretrieve(src, img_name + '_{}.jpg'.format(img_call))
-	# print("jpg path", jpg[0])
-	# img_file.append(jpg[0])
-	# img_cnt +=1
-
-	# driver.find_element(By.CSS_SELECTOR,'button[class = "_afxw _al46 _al47"], div[class=" _9zm2"]').click()
-
-
-
 	print("found carousel")
 	if video_check() != None:
 	# if driver.find_element(By.CSS_SELECTOR, 'div[class = "x5yr21d x1uhb9sk xh8yej3"]') is not None:	
@@ -371,10 +347,8 @@ def save_carousel_post(hashtag, img_name):
 		img_cnt +=1
 		print("image count", img_cnt)
 
-	# 		# nested_check().click()        
 		driver.find_element(By.CSS_SELECTOR,'button[class = "_afxw _al46 _al47"], div[class=" _9zm2"]').click()
 		print('Video first: clicked on next carousel iamge')
-	# 	# driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
 
 	elif video_check() == None:
 		print("an image starts off the carousel")
@@ -398,25 +372,8 @@ def save_carousel_post(hashtag, img_name):
 		# img_file.append(jpg[0])
 		img_cnt +=1
 
-	# 		# nested_check().click()        
 		driver.find_element(By.CSS_SELECTOR,'button[class = "_afxw _al46 _al47"], div[class=" _9zm2"]').click()
-	# 	print('Image first: clicked on next carousel iamge')
-		# driver.find_element(By.CSS_SELECTOR,"div[class='x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy x1ypdohk']").click()
-		# if video_check() != None:
-		# 	print("a video is next")
-		# 	vid_src, thumbnail_src, account, likes, comment, time = vid_src_alt(hashtag, img_cnt, img_call)
-		# 	accounts.append(account)
-		# 	post_like.append(likes)
-		# 	comments.append(comment)
-		# 	datetime.append(time)
-		# 	vid_src = vid_src.split("blob:")[-1]
-		# 	video_src.append(vid_src)
-		# 	img_src.append(thumbnail_src)
-		# 	jpg = urllib.request.urlretrieve(vid_src, img_name +'_{}.jpg'.format(img_call))
-		# 	img_file.append(jpg[0])
-		# 	img_cnt +=1
-		# 	print("image count", img_cnt)
-		# 	driver.find_element(By.CSS_SELECTOR,'button[class = "_afxw _al46 _al47"], div[class=" _9zm2"]').click()
+
 
 	else:
 		print("did not find anything in post")
@@ -455,25 +412,6 @@ def save_sngl_content_post(hashtag, img_name):
 	img_file = []
 	video_src = []
 	img_cnt = 0
-
-
-
-	# src, alt, account, likes, comment, time = image_info(hashtag, img_cnt, img_call)
-	# # src, alt, account, likes, comment, time = img_src_alt(hashtag, img_cnt, img_call)
-	# img_src.append(src)
-	# img__alt.append(alt)
-	# accounts.append(account)
-	# post_like.append(likes)
-	# comments.append(comment)
-	# datetime.append(time)
-	# # img_cnt +=1
-	# print("image count", img_cnt)
-	# # for i in src:
-	# # jpg = urllib.request.urlretrieve(src, img_name + '_{}.jpg'.format(img_call))
-	# # print("jpg path", jpg[0])
-	# # img_file.append(jpg[0])
-	# img_cnt +=1
-
 
 
 	
@@ -736,8 +674,6 @@ def scroll(hashtag):
 
 if __name__ == "__main__":
 	path()
-	username = "lwddissertation"
-	password = "YngweiMalmsteen"
 	# hashtag = "femicidioemergencianacional" 	
 	# hashtag = "niunamashmo"
 	# hashtag = "femicideinmexico" 	
@@ -762,7 +698,7 @@ if __name__ == "__main__":
     #### works?
 	# url_name(url)
 	
-	login(username, password, url)
+	login(url)
 	scroll(hashtag)
 	# scroll(hashtag)
 	# testlinks = post_urls(hashtag)
