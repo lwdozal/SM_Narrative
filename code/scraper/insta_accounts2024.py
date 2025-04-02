@@ -44,8 +44,8 @@ def login(url):
     password=driver.find_element("css selector","input[name='password']")
     username.clear() #clear default text in input area
     password.clear() #clear default text in input area
-    username.send_keys("lwddissertation")
-    password.send_keys("YngweiMalmsteen")
+    username.send_keys("USER_NAME")
+    password.send_keys("PASSWORD")
 
     login = driver.find_element("css selector","button[type='submit']").click()
 
@@ -639,8 +639,6 @@ def scroll(hashtag, c):
 
 if __name__ == "__main__":
 	path()
-	# username = "lwddissertation"
-	# password = "YngweiMalmsteen"
 
 	# hashtag = "femicidioemergencianacional" 	
 	# hashtag = "niunamashmo"
